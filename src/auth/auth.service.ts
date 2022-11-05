@@ -21,6 +21,8 @@ export class AuthService {
         },
       });
 
+      delete user.hash;
+
       return user;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -46,6 +48,7 @@ export class AuthService {
     const pwMatches = await argon.verify(user.hash, dto.password);
     // if password incorrect throw exception
     if (!pwMatches) throw new ForbiddenException('Credentials incorrect');
+    delete user.hash;
     return user;
   }
 }
